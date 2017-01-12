@@ -5,5 +5,11 @@
 </ion-header>
 
 <ion-content padding>
-  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus et facilis hic, ipsa itaque nam neque nostrum omnis possimus quod sequi tempora voluptas voluptatem. Aspernatur commodi ipsum laboriosam quasi reiciendis?</p>
+  <ion-list>
+    <ion-item *ngFor="let prod of products">
+      <h2>{{ prod.name }}</h2>
+      <p><b>Expiry Date:</b> {{ (prod.expiry_date) ? (prod.expiry_date | date: 'dd.MM.yy') : 'N/A' }}</p>
+      <p><b>Weight:</b> {{ (prod.weight_gram) ? (prod.weight_gram | number) : 'N/A' }}</p>
+    </ion-item>
+  </ion-list>
 </ion-content>

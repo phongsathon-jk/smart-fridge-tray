@@ -8,13 +8,14 @@ import { Storage } from '@ionic/storage';
 })
 export class ViewAllItemsPage {
 
-  constructor(public navCtrl: NavController, public storage: Storage) {
-    // set a key/value
-    storage.set('name', 'Max');
+  products: any;
 
-    storage.get('name').then(function (names) {
-      // $scope.names = names;
+  constructor(navCtrl: NavController, storage: Storage) {
+    this.products = [];
+
+    // Get products from DB
+    storage.get('products').then((products) => {
+      this.products = products;
     });
   }
-
 }
