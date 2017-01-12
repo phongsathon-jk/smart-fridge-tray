@@ -24,11 +24,9 @@ export class MyApp {
        */
       storage.set('products', [
         {
-          name: 'Apfelschorle 500 ml',
+          name: 'Tomato Juice 1 Litre',
           barcode: '1234567890',
-          weight_gram: 500,
-          expiry_date: '2017-12-31',
-          life_span: null
+          weight_gram: 100,
         }, {
           name: 'Apple',
           barcode: null,
