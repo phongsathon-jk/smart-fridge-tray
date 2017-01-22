@@ -26,15 +26,18 @@ export class MyApp {
         {
           name: 'Tomato Juice 1 Litre',
           barcode: '1234567890',
-          weight_gram: 100,
+          weight_gram: 1000
         }, {
-          name: 'Apple',
-          barcode: null,
-          weight_gram: 1000,
-          expiry_date: null,
-          life_span_day: 20
+          name: 'Buttermilk',
+          barcode: '0987654321',
+          weight_gram: 750
         }
       ]);
+
+      /*
+       * Initialize the items.
+       */
+      storage.set('items', []);
     });
   }
 }

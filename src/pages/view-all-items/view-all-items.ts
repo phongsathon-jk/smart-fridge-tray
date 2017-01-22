@@ -8,14 +8,14 @@ import { Storage } from '@ionic/storage';
 })
 export class ViewAllItemsPage {
 
-  products: any;
+  public items: any;
 
   constructor(navCtrl: NavController, storage: Storage) {
-    this.products = [];
+    this.items = [];
 
     // Get products from DB
-    storage.get('products').then((products) => {
-      this.products = products;
+    storage.get('items').then((items) => {
+      this.items = items;
     });
   }
 }
