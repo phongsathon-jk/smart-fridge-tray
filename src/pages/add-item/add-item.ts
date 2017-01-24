@@ -28,46 +28,62 @@ export class AddItemPage {
   }
 
   // local testing
-  // scanBarcode() {
-  //   BarcodeScanner.scan()
-  //     .then((result) => {
-  //       this.getProductByBarcode(result.text);
-  //     })
-  //     .catch((error) => {
-  //       this.showAlert('Cannot Barcode', error);
-  //     });
-  // }
+  scanBarcode() {
+    BarcodeScanner.scan()
+      .then((result) => {
+        this.getProductByBarcode(result.text);
+      })
+      .catch((error) => {
+        this.showAlert('Cannot Scan Barcode', error);
+      });
+  }
 
   getProductByBarcode(barcode) {
     this.storage.get('products').then((products) => {
+      let scannedProduct;
+
       for (let i = 0; i < products.length; i++) {
-        if (products[i].barcode === barcode) {
-          this.newItem = {
-            name: products[i].name,
-            barcode: products[i].barcode,
-            weight_gram: products[i].weight_gram,
-            expiry_date: this.today
-          };
+        if (products[i].barcode === barcode) scannedProduct = products[i];
+      }
+
+      if(scannedProduct) {
+        this.newItem = {
+          name: scannedProduct.name,
+          barcode: scannedProduct.barcode,
+          weight_gram: scannedProduct.weight_gram,
+          expiry_date: this.today
+        };
+      } else {
+        this.newItem = {
+          barcode: barcode,
+          expiry_date: this.today
         }
       }
     });
   }
 
-  // device testing
-  scanBarcode() {
-    this.newItem = {
-      name: 'Tomato Juice 1 Litre',
-      barcode: '1234567890',
-      weight_gram: 1000,
-      expiry_date: this.today
-    }
-  }
+  // local testing
+  // scanBarcode() {
+  //   this.newItem = {
+  //     name: 'Tomato Juice 1 Litre',
+  //     barcode: '1234567890',
+  //     weight_gram: 1000,
+  //     expiry_date: this.today
+  //   }
+  // }
 
   save() {
-    let missingFields = this.validateNewItem(this.newItem);
+    if(this.newItem.name === 'CLEAR_ALL') {
+      this.storage.set('items', []).then((result) => {
+        this.navCtrl.push(ViewAllItemsPage);
+      });
 
-    if(missingFields === '') this.searchProduct(this.newItem);
-    else this.showAlert('Missing Details', missingFields);
+    } else {
+      let missingFields = this.validateNewItem(this.newItem);
+
+      if (missingFields === '') this.searchProduct(this.newItem);
+      else this.showAlert('Missing Details', missingFields);
+    }
   }
 
   validateNewItem(newItem) {
