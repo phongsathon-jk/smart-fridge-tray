@@ -15,8 +15,6 @@ export class ViewAllItemsPage {
   constructor(private navCtrl: NavController, storage: Storage, public http: Http, public alertCtrl: AlertController) {
     this.storage = storage;
     this.items = [];
-
-    this.loadItems();
   }
 
   ionViewWillEnter() {
@@ -36,21 +34,26 @@ export class ViewAllItemsPage {
       .map(res => res.json())
       .subscribe(data => {
         for (let i = 0; i < this.items.length; i++) {
-          // update weight
-          this.items[i].weight_gram = data;
-
-          console.log('original weight', this.items[i].original_weight);
-          console.log('new weight', this.items[i].weight_gram);
-
-          // if weight is low, notify
-          if (((this.items[i].original_weight - this.items[i].weight_gram) / this.items[i].original_weight) <= 0.1) this.showAlert('Running Out Of Stock', 'You have only ' + this.items[i].weight_gram + ' g of ' + this.items[i].name);
-
-          console.log('expiry date', this.items[i].expiry_date);
-
-          // if 1 day to expiry date
-          // if ((new Date().toISOString() - this.items[i].expiry_date) <= 1)
+          this.checkWeight(this.items[i], data);
+          this.checkExpiryDate(this.items[i]);
         }
     });
+  }
+
+  checkWeight(item, newWeight) {
+    // update weight
+    item.weight_gram = newWeight;
+
+    // if weight is low, notify
+    if ((item.weight_gram / item.original_weight) <= 0.1) this.showAlert('Running Out Of Stock', 'You have only ' + item.weight_gram + ' g of ' + item.name);
+  }
+
+  checkExpiryDate(item) {
+    let expiryDate = new Date(item.expiry_date);
+    let today = new Date();
+    let daysDifference = Math.abs((expiryDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+
+    if (daysDifference <= 1) this.showAlert('Expire Soon', item.name + ' will expire on ' + expiryDate.getDate() + '.' + (expiryDate.getMonth() + 1) + '.' + expiryDate.getFullYear());
   }
 
   showAlert(title: string, message: string) {

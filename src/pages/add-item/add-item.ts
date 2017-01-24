@@ -90,20 +90,20 @@ export class AddItemPage {
       }
 
       if (foundProduct) this.addNewItem(foundProduct);
-      else this.addNewProduct(item);
+      else this.addNewProduct();
     });
   }
 
   addNewItem(item) {
-    console.log('add new item', item);
+    console.log('add new item', item.name);
 
     this.storage.get('items').then((items) => {
       item = {
-        name: item.name,
-        barcode: item.barcode,
-        weight_gram: item.weight_gram,
-        original_weight: item.weight_gram,
-        expiry_date: item.expiry_date
+        name: this.newItem.name,
+        barcode: this.newItem.barcode,
+        weight_gram: this.newItem.weight_gram,
+        original_weight: this.newItem.weight_gram,
+        expiry_date: this.newItem.expiry_date
       };
 
       items.push(item);
@@ -113,17 +113,18 @@ export class AddItemPage {
     });
   }
 
-  addNewProduct(product) {
+  addNewProduct() {
     let newProduct = {
-      name: product.name,
-      barcode: product.barcode,
-      weight_gram: product.weight_gram
+      name: this.newItem.name,
+      barcode: this.newItem.barcode,
+      weight_gram: this.newItem.weight_gram
     };
 
     console.log('add new product', newProduct);
 
     this.storage.get('products').then((products) => {
       products.push(newProduct);
+
       this.storage.set('products', products).then((result) => {
         this.addNewItem(newProduct);
       });
