@@ -25,7 +25,7 @@ export class AddItemPage {
   // scanBarcode() {
   //   BarcodeScanner.scan()
   //     .then((result) => {
-  //       this.searchProductByBarcode(result.text);
+  //       this.searchProduct(result.text);
   //     })
   //     .catch((error) => {
   //       alert(error);
@@ -52,10 +52,10 @@ export class AddItemPage {
   validateNewItem(newItem) {
     let result = '';
 
-    if (!newItem.name) result += 'Name; ';
-    if (!newItem.barcode) result += 'Barcode; ';
-    if ((!newItem.weight_gram) || (newItem.weight_gram <= 0)) result += 'Weight; ';
-    if (!newItem.expiry_date) result += 'Expiry date; ';
+    if (!newItem.name) result += 'Name, ';
+    if (!newItem.barcode) result += 'Barcode, ';
+    if ((!newItem.weight_gram) || (newItem.weight_gram <= 0)) result += 'Weight, ';
+    if (!newItem.expiry_date) result += 'Expiry date, ';
 
     return result.substr(0, result.length - 2);
   }
@@ -68,13 +68,13 @@ export class AddItemPage {
         if (products[i].barcode === item.barcode) foundProduct = products[i];
       }
 
-      if (foundProduct) this.addNewItem(item);
+      if (foundProduct) this.addNewItem(foundProduct);
       else this.addNewProduct(item);
     });
   }
 
   addNewItem(item) {
-    console.log('add new item');
+    console.log('add new item', item);
 
     this.storage.get('items').then((items) => {
       items.push(item);
@@ -85,9 +85,20 @@ export class AddItemPage {
   }
 
   addNewProduct(product) {
-    console.log('add new product');
+    let newProduct = {
+      name: product.name,
+      barcode: product.barcode,
+      weight_gram: product.weight_gram
+    };
 
-    this.addNewItem(product);
+    console.log('add new product', newProduct);
+
+    this.storage.get('products').then((products) => {
+      products.push(newProduct);
+      this.storage.set('products', products).then((result) => {
+        this.addNewItem(newProduct);
+      });
+    });
   }
 
   showAlert(title: string, message: string) {
