@@ -21,16 +21,37 @@ export class AddItemPage {
     };
   }
 
+  ionViewWillEnter() {
+    this.newItem = {
+      expiry_date: this.today
+    };
+  }
+
   // local testing
   // scanBarcode() {
   //   BarcodeScanner.scan()
   //     .then((result) => {
-  //       this.searchProduct(result.text);
+  //       this.getProductByBarcode(result.text);
   //     })
   //     .catch((error) => {
-  //       alert(error);
+  //       this.showAlert('Cannot Barcode', error);
   //     });
   // }
+
+  getProductByBarcode(barcode) {
+    this.storage.get('products').then((products) => {
+      for (let i = 0; i < products.length; i++) {
+        if (products[i].barcode === barcode) {
+          this.newItem = {
+            name: products[i].name,
+            barcode: products[i].barcode,
+            weight_gram: products[i].weight_gram,
+            expiry_date: this.today
+          };
+        }
+      }
+    });
+  }
 
   // device testing
   scanBarcode() {
@@ -77,6 +98,14 @@ export class AddItemPage {
     console.log('add new item', item);
 
     this.storage.get('items').then((items) => {
+      item = {
+        name: item.name,
+        barcode: item.barcode,
+        weight_gram: item.weight_gram,
+        original_weight: item.weight_gram,
+        expiry_date: item.expiry_date
+      };
+
       items.push(item);
       this.storage.set('items', items).then((result) => {
         this.navCtrl.push(ViewAllItemsPage);
