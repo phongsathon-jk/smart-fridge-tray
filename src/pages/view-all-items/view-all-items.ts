@@ -7,14 +7,15 @@ import { Storage } from '@ionic/storage';
   templateUrl: 'view-all-items.html'
 })
 export class ViewAllItemsPage {
+  storage: Storage;
+  items: any;
 
-  public items: any;
-
-  constructor(navCtrl: NavController, storage: Storage) {
+  constructor(private navCtrl: NavController, storage: Storage) {
+    this.storage = storage;
     this.items = [];
 
     // Get products from DB
-    storage.get('items').then((items) => {
+    this.storage.get('items').then((items) => {
       this.items = items;
     });
   }

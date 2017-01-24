@@ -5,5 +5,36 @@
 </ion-header>
 
 <ion-content padding>
-  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias amet aut delectus, dignissimos dolorem earum enim fugiat fugit libero magnam nisi nulla provident quae quia quibusdam reiciendis reprehenderit, similique vel!</p>
+
+  <ion-card>
+    <ion-card-header>
+      Get item detail via barcode
+    </ion-card-header>
+    <ion-card-content>
+      <button ion-button block (click)="scanBarcode()">Scan Barcode</button>
+    </ion-card-content>
+  </ion-card>
+
+  <form (ngSubmit)="save()">
+    <ion-item>
+      <ion-label floating>Name</ion-label>
+      <ion-input type="text" [(ngModel)]="newItem.name" name="name"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Barcode</ion-label>
+      <ion-input type="text" [(ngModel)]="newItem.barcode" name="barcode"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Expiry Date</ion-label>
+      <ion-datetime name="expiry_date" displayFormat="DD MMM YYYY" min="2017" max="2050" pickerFormat="DD MMM YYYY" [(ngModel)]="newItem.expiry_date"></ion-datetime>
+    </ion-item>
+
+    <ion-item>
+      <ion-label floating>Original Weight (g)</ion-label>
+      <ion-input type="number" [(ngModel)]="newItem.weight_gram" name="weight"></ion-input>
+    </ion-item>
+    <button ion-button type="submit" block>Save</button>
+  </form>
 </ion-content>
